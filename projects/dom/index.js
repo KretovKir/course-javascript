@@ -11,6 +11,9 @@
    createDivWithText('loftschool') // создаст элемент div, поместит в него 'loftschool' и вернет созданный элемент
  */
 function createDivWithText(text) {
+  let element = document.createElement('div');
+  element.textContent = text;
+  return element;
 }
 
 /*
@@ -22,6 +25,7 @@ function createDivWithText(text) {
    prepend(document.querySelector('#one'), document.querySelector('#two')) // добавит элемент переданный первым аргументом в начало элемента переданного вторым аргументом
  */
 function prepend(what, where) {
+  where.prepend(what);
 }
 
 /*
@@ -44,6 +48,13 @@ function prepend(what, where) {
    findAllPSiblings(document.body) // функция должна вернуть массив с элементами div и span т.к. следующим соседом этих элементов является элемент с тегом P
  */
 function findAllPSiblings(where) {
+  const nextP = [];
+  for (let el of where.children) {
+    if (el.nextElementSibling && el.nextElementSibling.tagName === 'P') {
+      nextP.push(el);
+    }
+  }
+  return nextP;
 }
 
 /*
@@ -66,7 +77,7 @@ function findAllPSiblings(where) {
 function findError(where) {
   const result = [];
 
-  for (const child of where.childNodes) {
+  for (const child of where.children) {
     result.push(child.textContent);
   }
 
@@ -86,6 +97,14 @@ function findError(where) {
    должно быть преобразовано в <div></div><p></p>
  */
 function deleteTextNodes(where) {
+  for (let i = 0; i < where.childNodes.length; i++) {
+    const el = where.childNodes[i];
+    if (el.nodeType === Element.TEXT_NODE) {
+      where.removeChild(el);
+      i--;
+    }
+  }
+  return where;
 }
 
 /*
@@ -109,6 +128,36 @@ function deleteTextNodes(where) {
    }
  */
 function collectDOMStat(root) {
+  let obj = {
+    tags: {},
+    classes: {},
+    texts: {},
+  };
+  function scan(root) {
+    for (let child of root.childNodes) {
+      if (child.nodeType === Element.TEXT_NODE) {
+        obj.texts++;
+      } else if (child.nodeType === Node.ELEMENT_NODE) {
+        if (child.tagName in obj.tags) {
+          obj.tags[child.tagName]++;
+        } else {
+          obj.tags[child.tagName] = 1;
+        }
+
+        for (let classIt of child.classList) {
+          if (classIt in obj.classes) {
+            obj.classes[classIt]++;
+          } else {
+            obj.classes[classIt] = 1;
+          }
+        }
+      }
+      
+    }
+    
+  }
+  scan(root);
+  return obj;
 }
 
 export {
