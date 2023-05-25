@@ -1,5 +1,6 @@
 import pages from './pages';
 import model from './model';
+import profilePage from './profilePage'; 
 
 export default {
   async getNextPhoto() {
@@ -15,6 +16,10 @@ export default {
     headerPhotoComp.style.backgroundImage = `url('${friend.photo_50}')`;
     headerNameComp.innerText = `${friend.first_name ?? ''} ${friend.last_name ?? ''}`;
     photoComp.style.backgroundImage = `url(${url})`;
+    footerPhotoComp.style.backgroundImage = `url('${model.me.photo_50}')`;
+
+    this.friend = friend;
+    
   },
 
   handleEvents() {
@@ -30,6 +35,19 @@ export default {
       if(direction < 0){
         await this.getNextPhoto();
       }
-    })
+    });
+    document
+    .querySelector('.component-header-profile-link')
+    .addEventListener('click', async ()=>{
+      await profilePage.setUser(this.friend);
+      pages.openPage('profile');
+    });
+
+    document
+    .querySelector('.component-footer-container-profile-link')
+    .addEventListener('clock', async () =>{
+      await profilePage.setUser(model.me);
+      pages.openPage('profile');
+    }) ;
   },
 };
