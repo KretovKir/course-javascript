@@ -13,15 +13,19 @@ export default {
     const photoComp = document.querySelector('.component-photo');
     const headerPhotoComp = document.querySelector('.component-header-photo');
     const headerNameComp = document.querySelector('.component-header-name');
+    const footerPhotoComp = document.querySelector('.component-footer-photo');
+
+    this.friend = friend;
+    this.photoId = id; 
+    
 
     headerPhotoComp.style.backgroundImage = `url('${friend.photo_50}')`;
     headerNameComp.innerText = `${friend.first_name ?? ''} ${friend.last_name ?? ''}`;
     photoComp.style.backgroundImage = `url(${url})`;
     footerPhotoComp.style.backgroundImage = `url('${model.me.photo_50}')`;
+    
     this.setLikes(stats.likes, stats.liked);
     this.setComments(stats.comments);
-    this.friend = friend;
-    this.photoId = id; 
     
   },
 
